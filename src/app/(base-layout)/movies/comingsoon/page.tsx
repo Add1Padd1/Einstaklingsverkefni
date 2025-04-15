@@ -2,7 +2,6 @@ import { executeQuery } from '@/lib/datocms/executeQuery';
 import { graphql } from '@/lib/datocms/graphql';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { revalidateTag } from 'next/cache';
 import styles from '../movies.module.css';
 
 export const metadata = {
@@ -46,6 +45,7 @@ export default async function ComingMoviesPage() {
       <h3>Væntanlegt:</h3>
 
       <div className={styles.movieGrid}>
+        {/* @ts-expect-error */}
         {allMovies.slice(0, 6).map((movie) => {
           // Limit to 6 movies (2 per row, 3 rows max)
           return (

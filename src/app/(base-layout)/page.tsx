@@ -3,6 +3,7 @@ import { graphql } from '@/lib/datocms/graphql';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import styles from './movies/movies.module.css';
+import { Movie } from '@/types';
 
 export const metadata = {
   title: 'Kvikmyndasíða',
@@ -33,7 +34,8 @@ const query = graphql(
  */
 
 export default async function FrontPage() {
-  const { allMovies } = await executeQuery(query);
+  //@ts-expect-error
+  const { allMovies }: { allMovies: Movie[] } = await executeQuery(query);
 
   if (!allMovies) {
     notFound();

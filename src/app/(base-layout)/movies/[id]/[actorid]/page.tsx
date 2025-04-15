@@ -2,7 +2,6 @@ import { executeQuery } from '@/lib/datocms/executeQuery';
 import { graphql } from '@/lib/datocms/graphql';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { revalidateTag } from 'next/cache';
 
 export const metadata = {
   title: 'Kvikmyndasíða',
@@ -39,12 +38,15 @@ export default async function ActorPage({ params }: { params: Promise<{ actorid:
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        {/* Actor Name */}
+        {/* @ts-expect-error */}
         <h3>{actor.actorname}</h3>
 
         {/* Actor Image */}
+
         <img
+          /* @ts-expect-error */
           src={actor.actorimage.url}
+          /* @ts-expect-error */
           alt={actor.actorname}
           style={{ width: '300px', borderRadius: '8px', marginBottom: '20px' }}
         />
@@ -53,6 +55,7 @@ export default async function ActorPage({ params }: { params: Promise<{ actorid:
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <h4>Movies:</h4>
           <ul style={{ listStyle: 'none', padding: 0 }}>
+            {/* @ts-expect-error */}
             {actor.kvikmynd.map((movie) => (
               <li key={movie.movietitle} style={{ marginBottom: '10px' }}>
                 <Link

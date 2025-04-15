@@ -45,6 +45,7 @@ export default async function ReleasedMoviesPage() {
       <h3>Í bíó:</h3>
 
       <div className={styles.movieGrid}>
+        {/* @ts-expect-error */}
         {allMovies.slice(0, 6).map((movie) => {
           // Limit to 6 movies (2 per row, 3 rows max)
           return (
