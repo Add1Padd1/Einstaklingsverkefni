@@ -6,6 +6,7 @@ import { draftMode } from 'next/headers';
 import { toNextMetadata } from 'react-datocms';
 
 import './global.css';
+import Link from 'next/link';
 
 const query = graphql(
   /* GraphQL */ `
@@ -34,20 +35,27 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <header>
-          <h1>DatoCMS + Next.js Starter Kit</h1>
-          <nav>
-            <a className="navlink" href="https://www.datocms.com/docs/next-js">
-              📚 Full Integration Guide
-            </a>
-            <a className="navlink" href="/basic">
-              🔧 Basic Route
-            </a>
-            <a className="navlink" href="/real-time-updates">
-              ⚡️ Real-time Updates Route
-            </a>
-          </nav>
-          <DraftModeToggler draftModeEnabled={draftMode().isEnabled} />
+        <header
+          style={{
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}
+        >
+          <Link href="/" className="icon" style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+              src="https://www.datocms-assets.com/159923/1744678590-home.png"
+              alt="Logo"
+              style={{ width: '40px', height: '40px' }}
+            />
+          </Link>
+          <Link href="/movies/comingsoon" className="pill">
+            Væntanlegt
+          </Link>
+          <Link href="/movies/released" className="pill">
+            Í bíó
+          </Link>
         </header>
         <main>{children}</main>
       </body>

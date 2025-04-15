@@ -1,18 +1,20 @@
 import { executeQuery } from '@/lib/datocms/executeQuery';
 import { graphql } from '@/lib/datocms/graphql';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import styles from './movies/movies.module.css';
+import Link from 'next/link';
+import { revalidateTag } from 'next/cache';
+import styles from '../movies.module.css';
 
 export const metadata = {
   title: 'Kvikmyndasíða',
 };
 const query = graphql(
   /* GraphQL */ `
-    query AllMoviesSorted {
-      allMovies(orderBy: movietitle_ASC) {
+    query Movies {
+      allMovies(filter: { released: { eq: false } }, orderBy: releaseDate_ASC) {
         id
         movieimage {
+          filename
           url
         }
         movietitle
@@ -20,34 +22,35 @@ const query = graphql(
         movielength
         moviepg
         moviedescription
+        releaseDate
+        movieactors {
+          actorname
+          actorimage {
+            id
+          }
+        }
       }
     }
   `,
   [],
 );
-
-/**
- * We use a helper to generate function that fits the Next.js
- * `generateMetadata()` format, automating the creation of meta tags based on
- * the `_seoMetaTags` present in a DatoCMS GraphQL query.
- */
-
-export default async function FrontPage() {
-  const { allMovies } = await executeQuery(query);
-
+export default async function ComingMoviesPage() {
+  /* revalidateTag('datocms-movies-comingsoon'); */
+  const { allMovies } = await executeQuery(query, {});
+  console.log(allMovies);
   if (!allMovies) {
     notFound();
   }
-
   return (
     <>
-      <h3>All Movies:</h3>
+      <h3>Væntanlegt:</h3>
+
       <div className={styles.movieGrid}>
-        {allMovies.slice(0, 9).map((movie) => {
-          // Limit to 9 movies (3 rows max)
+        {allMovies.slice(0, 6).map((movie) => {
+          // Limit to 6 movies (2 per row, 3 rows max)
           return (
-            <Link href={`/movies/${movie.id}`} key={movie.id}>
-              <div className={styles.movieItem}>
+            <Link href={`/movies/${movie.id}`}>
+              <div key={movie.movietitle} className={styles.movieItem}>
                 <div className={styles.movieImageContainer}>
                   <img
                     src={movie.movieimage.url}
@@ -58,6 +61,7 @@ export default async function FrontPage() {
                 <div className={styles.movieContent}>
                   <p className={styles.movieTitle}>{movie.movietitle}</p>
                   <p className={styles.movieDescription}>{movie.moviedescription}</p>
+                  <p className={styles.releaseDate}>Release Date: {movie.releaseDate}</p>
                 </div>
               </div>
             </Link>
